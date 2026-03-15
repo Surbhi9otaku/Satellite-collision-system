@@ -1,34 +1,33 @@
 const canvas = document.getElementById("spaceCanvas");
 const ctx = canvas.getContext("2d");
 
-let satA = { x: 150, y: 200 };
-let satB = { x: 350, y: 200 };
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
+const orbitRadius = 120;
 
-let angleA = 0;
-let angleB = Math.PI;
+// Satellite positions
+let satA = { x: centerX - orbitRadius, y: centerY };
+let satB = { x: centerX + orbitRadius, y: centerY };
 
-function drawSpace() {
+// Space debris
+let debris = { x: 300, y: 120 };
+
+function drawScene() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Earth
     ctx.beginPath();
-    ctx.arc(250, 200, 40, 0, Math.PI * 2);
+    ctx.arc(centerX, centerY, 40, 0, Math.PI * 2);
     ctx.fillStyle = "blue";
     ctx.fill();
 
     // Orbit
     ctx.beginPath();
-    ctx.arc(250, 200, 120, 0, Math.PI * 2);
+    ctx.arc(centerX, centerY, orbitRadius, 0, Math.PI * 2);
     ctx.strokeStyle = "gray";
+    ctx.lineWidth = 2;
     ctx.stroke();
-
-    // Update satellite positions (orbit motion)
-    satA.x = 250 + 120 * Math.cos(angleA);
-    satA.y = 200 + 120 * Math.sin(angleA);
-
-    satB.x = 250 + 120 * Math.cos(angleB);
-    satB.y = 200 + 120 * Math.sin(angleB);
 
     // Satellite A
     ctx.beginPath();
@@ -41,52 +40,51 @@ function drawSpace() {
     ctx.arc(satB.x, satB.y, 8, 0, Math.PI * 2);
     ctx.fillStyle = "red";
     ctx.fill();
+
+    // Space Debris
+    ctx.beginPath();
+    ctx.arc(debris.x, debris.y, 6, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+
+    // Labels
+    ctx.fillStyle = "white";
+    ctx.font = "12px Arial";
+    ctx.fillText("Sat-A", satA.x + 10, satA.y);
+    ctx.fillText("Sat-B", satB.x + 10, satB.y);
+    ctx.fillText("Debris", debris.x + 10, debris.y);
 }
 
-// animation loop
-function animate() {
+drawScene();
 
-    angleA += 0.01;
-    angleB += 0.008;
+// Collision Check
+document.getElementById("checkBtn").addEventListener("click", function () {
 
-    drawSpace();
-
-    requestAnimationFrame(animate);
-}
-
-animate();
-
-document.getElementById("checkBtn").onclick = function () {
-
-    let dx = satA.x - satB.x;
-    let dy = satA.y - satB.y;
+    let dx = satA.x - debris.x;
+    let dy = satA.y - debris.y;
 
     let distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance < 60) {
+    let resultDiv = document.getElementById("result");
 
-        ctx.beginPath();
-        ctx.moveTo(satA.x, satA.y);
-        ctx.lineTo(satB.x, satB.y);
-        ctx.strokeStyle = "red";
-        ctx.stroke();
+    if (distance < 50) {
 
-        document.getElementById("result").innerHTML = `
-<h3>Result</h3>
-<p style="color:red;">⚠ Collision Risk Detected</p>
-<p>Suggested Maneuver: Adjust orbit +5 km</p>
-<p>Fuel Required: Low</p>
-`;
+        resultDiv.innerHTML = `
+        <h3>Result</h3>
+        <p>⚠ Collision Risk: HIGH</p>
+        <p>Suggested Maneuver: Adjust Orbit by +5°</p>
+        <p>Fuel Required: 2.3 kg</p>
+        `;
 
-    }
-    else {
+    } else {
 
-        document.getElementById("result").innerHTML = `
-<h3>Result</h3>
-<p style="color:lightgreen;">✔ Satellites are safe</p>
-<p>No maneuver required</p>
-`;
+        resultDiv.innerHTML = `
+        <h3>Result</h3>
+        <p>✅ Collision Risk: LOW</p>
+        <p>Suggested Maneuver: None</p>
+        <p>Fuel Required: 0 kg</p>
+        `;
 
     }
 
-};
+});
