@@ -5,12 +5,11 @@ const centerX = canvas.width / 2;
 const centerY = canvas.height / 2;
 const orbitRadius = 120;
 
-// Satellite positions
-let satA = { x: centerX - orbitRadius, y: centerY };
-let satB = { x: centerX + orbitRadius, y: centerY };
+let angleA = 0;
+let angleB = Math.PI;
 
-// Space debris
-let debris = { x: 300, y: 120 };
+// debris
+let debris = { x: 320, y: 120 };
 
 function drawScene() {
 
@@ -29,6 +28,17 @@ function drawScene() {
     ctx.lineWidth = 2;
     ctx.stroke();
 
+    // Satellite positions
+    let satA = {
+        x: centerX + orbitRadius * Math.cos(angleA),
+        y: centerY + orbitRadius * Math.sin(angleA)
+    };
+
+    let satB = {
+        x: centerX + orbitRadius * Math.cos(angleB),
+        y: centerY + orbitRadius * Math.sin(angleB)
+    };
+
     // Satellite A
     ctx.beginPath();
     ctx.arc(satA.x, satA.y, 8, 0, Math.PI * 2);
@@ -41,7 +51,7 @@ function drawScene() {
     ctx.fillStyle = "red";
     ctx.fill();
 
-    // Space Debris
+    // Debris
     ctx.beginPath();
     ctx.arc(debris.x, debris.y, 6, 0, Math.PI * 2);
     ctx.fillStyle = "white";
@@ -53,6 +63,12 @@ function drawScene() {
     ctx.fillText("Sat-A", satA.x + 10, satA.y);
     ctx.fillText("Sat-B", satB.x + 10, satB.y);
     ctx.fillText("Debris", debris.x + 10, debris.y);
+
+    // update angles (movement)
+    angleA += 0.01;
+    angleB += 0.012;
+
+    requestAnimationFrame(drawScene);
 }
 
 drawScene();
@@ -60,8 +76,11 @@ drawScene();
 // Collision Check
 document.getElementById("checkBtn").addEventListener("click", function () {
 
-    let dx = satA.x - debris.x;
-    let dy = satA.y - debris.y;
+    let satAx = centerX + orbitRadius * Math.cos(angleA);
+    let satAy = centerY + orbitRadius * Math.sin(angleA);
+
+    let dx = satAx - debris.x;
+    let dy = satAy - debris.y;
 
     let distance = Math.sqrt(dx * dx + dy * dy);
 
