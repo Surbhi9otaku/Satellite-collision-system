@@ -12,7 +12,8 @@ h1 {
 }
 
 .container {
-    width: 500px;
+    width: 90%;
+    max-width: 500px;
     margin: auto;
     background: #1c2045;
     padding: 20px;
@@ -24,14 +25,15 @@ input {
     display: block;
     margin: 10px auto;
     padding: 10px;
-    width: 80%;
+    width: 90%;
     border: none;
     border-radius: 5px;
 }
 
 button {
     margin-top: 15px;
-    padding: 10px 25px;
+    padding: 10px;
+    width: 90%;
     background: #4CAF50;
     color: white;
     border: none;
@@ -47,6 +49,8 @@ button:hover {
 }
 
 canvas {
+    width: 100%;
+    height: auto;
     background: black;
     border: 2px solid white;
     margin: 20px auto;
@@ -56,4 +60,26 @@ canvas {
 
 #result {
     margin-top: 20px;
+}
+
+#info {
+    margin-top: 20px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+
+    h1 {
+        font-size: 20px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    .container {
+        padding: 15px;
+    }
 }
