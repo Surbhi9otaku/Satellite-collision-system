@@ -73,37 +73,42 @@ function drawScene() {
 
 drawScene();
 
-// Collision Check
-document.getElementById("checkBtn").addEventListener("click", function () {
 
-    let satAx = centerX + orbitRadius * Math.cos(angleA);
-    let satAy = centerY + orbitRadius * Math.sin(angleA);
+// BACKEND CONNECTION
+document.getElementById("checkBtn").addEventListener("click", async function () {
 
-    let dx = satAx - debris.x;
-    let dy = satAy - debris.y;
+    let satA = {
+        x: centerX + orbitRadius * Math.cos(angleA),
+        y: centerY + orbitRadius * Math.sin(angleA)
+    };
 
-    let distance = Math.sqrt(dx * dx + dy * dy);
+    let satB = {
+        x: centerX + orbitRadius * Math.cos(angleB),
+        y: centerY + orbitRadius * Math.sin(angleB)
+    };
 
-    let resultDiv = document.getElementById("result");
+    try {
+        let response = await fetch("http://localhost:5000/check-collision", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ satA, satB })
+        });
 
-    if (distance < 50) {
+        let data = await response.json();
 
-        resultDiv.innerHTML = `
-        <h3>Result</h3>
-        <p>⚠ Collision Risk: HIGH</p>
-        <p>Suggested Maneuver: Adjust Orbit by +5°</p>
-        <p>Fuel Required: 2.3 kg</p>
+        document.getElementById("result").innerHTML = `
+            <h3>Result</h3>
+            <p>Collision Risk: ${data.risk}</p>
+            <p>Suggested Maneuver: ${data.maneuver}</p>
+            <p>Fuel Required: ${data.fuel}</p>
         `;
 
-    } else {
-
-        resultDiv.innerHTML = `
-        <h3>Result</h3>
-        <p>✅ Collision Risk: LOW</p>
-        <p>Suggested Maneuver: None</p>
-        <p>Fuel Required: 0 kg</p>
+    } catch (error) {
+        document.getElementById("result").innerHTML = `
+            <p style="color:red;">⚠ Backend not connected</p>
         `;
-
     }
 
 });
