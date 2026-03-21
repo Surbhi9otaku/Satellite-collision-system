@@ -101,6 +101,7 @@ document.getElementById("checkBtn").addEventListener("click", async function () 
         document.getElementById("result").innerHTML = `
             <h3>Result</h3>
             <p>Collision Risk: ${data.risk}</p>
+            <p>${data.prediction}</p>
             <p>Suggested Maneuver: ${data.maneuver}</p>
             <p>Fuel Required: ${data.fuel}</p>
         `;
