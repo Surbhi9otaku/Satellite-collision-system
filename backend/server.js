@@ -11,30 +11,47 @@ app.post("/check-collision", (req, res) => {
 
     const { satA, satB } = req.body;
 
-    let dx = satA.x - satB.x;
-    let dy = satA.y - satB.y;
+    let risk = "LOW";
+    let timeToCollision = null;
 
-    let distance = Math.sqrt(dx * dx + dy * dy);
+    // simulate future steps (AI-like prediction)
+    for (let t = 1; t <= 100; t++) {
+
+        let futureAx = satA.x + t * 0.5;
+        let futureAy = satA.y + t * 0.5;
+
+        let futureBx = satB.x + t * -0.4;
+        let futureBy = satB.y + t * -0.3;
+
+        let dx = futureAx - futureBx;
+        let dy = futureAy - futureBy;
+
+        let distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 40) {
+            risk = "HIGH";
+            timeToCollision = t;
+            break;
+        }
+    }
 
     let result;
 
-    if (distance < 50) {
+    if (risk === "HIGH") {
         result = {
             risk: "HIGH",
-            maneuver: "Adjust orbit by +5°",
-            fuel: "2.3 kg"
+            maneuver: "Change orbit slightly",
+            fuel: "2.8 kg",
+            prediction: `Collision in ~${timeToCollision} sec`
         };
     } else {
         result = {
             risk: "LOW",
             maneuver: "None",
-            fuel: "0 kg"
+            fuel: "0 kg",
+            prediction: "No collision predicted"
         };
     }
 
     res.json(result);
-});
-
-app.listen(5000, () => {
-    console.log("Server running on port 5000");
 });
