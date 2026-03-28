@@ -81,14 +81,22 @@ document.getElementById("checkBtn").addEventListener("click", async function () 
     <p>⏳ Predicting collision using AI...</p>
     `;
 
+    // get user inputs
+    let posA = parseFloat(document.getElementById("posA").value);
+    let velA = parseFloat(document.getElementById("velA").value);
+
+    let posB = parseFloat(document.getElementById("posB").value);
+    let velB = parseFloat(document.getElementById("velB").value);
+
+    // fallback to animation if empty
     let satA = {
-        x: centerX + orbitRadius * Math.cos(angleA),
-        y: centerY + orbitRadius * Math.sin(angleA)
+        x: isNaN(posA) ? centerX + orbitRadius * Math.cos(angleA) : posA,
+        y: isNaN(velA) ? centerY + orbitRadius * Math.sin(angleA) : velA
     };
 
     let satB = {
-        x: centerX + orbitRadius * Math.cos(angleB),
-        y: centerY + orbitRadius * Math.sin(angleB)
+        x: isNaN(posB) ? centerX + orbitRadius * Math.cos(angleB) : posB,
+        y: isNaN(velB) ? centerY + orbitRadius * Math.sin(angleB) : velB
     };
 
     try {
