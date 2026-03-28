@@ -2,56 +2,41 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
-// Collision API
-app.post("/check-collision", (req, res) => {
+// test route
+app.get("/", (req, res) => {
+    res.send("Backend is running 🚀");
+});
 
+// existing API
+app.post("/check-collision", (req, res) => {
     const { satA, satB } = req.body;
 
-    let risk = "LOW";
-    let timeToCollision = null;
+    let dx = satA.x - satB.x;
+    let dy = satA.y - satB.y;
+    let distance = Math.sqrt(dx * dx + dy * dy);
 
-    // simulate future steps (AI-like prediction)
-    for (let t = 1; t <= 100; t++) {
-
-        let futureAx = satA.x + t * 0.5;
-        let futureAy = satA.y + t * 0.5;
-
-        let futureBx = satB.x + t * -0.4;
-        let futureBy = satB.y + t * -0.3;
-
-        let dx = futureAx - futureBx;
-        let dy = futureAy - futureBy;
-
-        let distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < 40) {
-            risk = "HIGH";
-            timeToCollision = t;
-            break;
-        }
-    }
-
-    let result;
-
-    if (risk === "HIGH") {
-        result = {
+    if (distance < 50) {
+        res.json({
             risk: "HIGH",
-            maneuver: "Change orbit slightly",
-            fuel: "2.8 kg",
-            prediction: `Collision in ~${timeToCollision} sec`
-        };
+            prediction: "Collision soon ⚠",
+            maneuver: "Adjust orbit",
+            fuel: "2 kg"
+        });
     } else {
-        result = {
+        res.json({
             risk: "LOW",
+            prediction: "No collision",
             maneuver: "None",
-            fuel: "0 kg",
-            prediction: "No collision predicted"
-        };
+            fuel: "0 kg"
+        });
     }
+});
 
-    res.json(result);
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
