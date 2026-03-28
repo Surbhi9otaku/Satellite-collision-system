@@ -77,6 +77,10 @@ drawScene();
 // BACKEND CONNECTION
 document.getElementById("checkBtn").addEventListener("click", async function () {
 
+    document.getElementById("result").innerHTML = `
+    <p>⏳ Predicting collision using AI...</p>
+    `;
+
     let satA = {
         x: centerX + orbitRadius * Math.cos(angleA),
         y: centerY + orbitRadius * Math.sin(angleA)
@@ -108,7 +112,7 @@ document.getElementById("checkBtn").addEventListener("click", async function () 
 
     } catch (error) {
         document.getElementById("result").innerHTML = `
-            <p style="color:red;">⚠ Backend not connected</p>
+        <p style="color:red;">⚠ Server waking up... try again</p>
         `;
     }
 
