@@ -88,7 +88,7 @@ document.getElementById("checkBtn").addEventListener("click", async function () 
     };
 
     try {
-        let response = await fetch("http://localhost:5000/check-collision", {
+        let response = await fetch("https://satellite-collision-system.onrender.com/check-collision", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
