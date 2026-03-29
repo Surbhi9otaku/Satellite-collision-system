@@ -43,5 +43,15 @@ This project simulates satellite motion and predicts potential collisions, sugge
 ## 📦 Installation & Running the Project
 
 ```bash
+1. Clone the repository
 git clone https://github.com/Surbhi9otaku/Satellite-collision-system.git
 cd Satellite-collision-system
+
+2. Setup & Start Backend
+cd backend
+npm install
+node server.js
+👉 Runs on: http://localhost:5000
+
+3. Run Frontend
+👉 Open frontend/index.html in your browser
