@@ -40,7 +40,7 @@ This project simulates satellite motion and predicts potential collisions, sugge
 
 ---
 
-## 📦 Installation
+## 📦 Installation & Running the Project
 
 ```bash
 git clone https://github.com/Surbhi9otaku/Satellite-collision-system.git
